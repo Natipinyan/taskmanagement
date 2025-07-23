@@ -4,74 +4,82 @@
 <a href="/tasks/add" class="add-button">הוסף משימה חדשה</a>
 
 <h2>סינון משימות</h2>
-<form method="GET" action="/tasks/List">
-    <label for="status">סטטוס:</label>
-    <select name="status" id="status">
-        <option value="all" <%= filters.status === 'all' ? 'selected' : '' %>>הכל</option>
-        <option value="completed" <%= filters.status === 'completed' ? 'selected' : '' %>>בוצעו</option>
-        <option value="pending" <%= filters.status === 'pending' ? 'selected' : '' %>>לא בוצעו</option>
-    </select>
-    <label for="category">קטגוריה:</label>
-    <select name="category" id="category">
-        <option value="all" <%= filters.category === 'all' ? 'selected' : '' %>>כל הקטגוריות</option>
-        <% categories.forEach(cat => { %>
-            <option value="<%= cat.id %>" <%= filters.category == cat.id ? 'selected' : '' %>><%= cat.name %></option>
-        <% }) %>
-    </select>
-    <button type="submit">סנן</button>
+<form method="GET" action="/tasks/List" class="filter-form">
+    <div class="filter-row">
+        <div class="filter-group">
+            <label for="category">קטגוריה:</label>
+            <select name="category" id="category">
+                <option value="all" <%= filters.category === 'all' ? 'selected' : '' %>>כל הקטגוריות</option>
+                <% categories.forEach(cat => { %>
+                    <option value="<%= cat.id %>" <%= filters.category == cat.id ? 'selected' : '' %>><%= cat.name %></option>
+                <% }) %>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label for="status">סטטוס:</label>
+            <select name="status" id="status">
+                <option value="all" <%= filters.status === 'all' ? 'selected' : '' %>>הכל</option>
+                <option value="completed" <%= filters.status === 'completed' ? 'selected' : '' %>>בוצעו</option>
+                <option value="pending" <%= filters.status === 'pending' ? 'selected' : '' %>>לא בוצעו</option>
+            </select>
+        </div>
+    </div>
+    <button type="submit">✔️ סנן</button>
 </form>
 
 <h2>רשימת המשימות</h2>
 <table>
     <thead>
-        <tr>
-            <th>#</th>
-            <th>סטטוס</th>
-            <th>תיאור</th>
-            <th>קטגוריה</th>
-            <th>תאריך יעד</th>
-            <th>עריכה</th>
-            <th>מחיקה</th>
-        </tr>
+    <tr>
+        <th>#</th>
+        <th>סטטוס</th>
+        <th>תיאור</th>
+        <th>קטגוריה</th>
+        <th>תאריך יעד</th>
+        <th>עריכה</th>
+        <th>מחיקה</th>
+    </tr>
     </thead>
     <tbody>
-        <% if (tasks.length > 0) { %>
-            <% tasks.forEach((task, idx) => { %>
-                <tr class="<%= task.done ? 'completed-task' : '' %>">
-                    <td><%= idx + 1 + (page * 10) %></td>
-                    <td>
-                        <form action="/tasks/toggle/<%= task.id %>" method="POST">
-                            <button type="submit"><%= task.done ? '✅' : '⬜️' %></button>
-                        </form>
-                    </td>
-                    <td><%= task.description %></td>
-                    <td><%= task.category_name || 'ללא' %></td>
-                    <td><%= task.date ? new Date(task.date).toLocaleDateString('he-IL') : 'אין' %></td>
-                    <td><a href="/tasks/Edit/<%= task.id %>">ערוך</a></td>
-                    <td>
-                        <form action="/tasks/Delete/<%= task.id %>" method="POST" onsubmit="return confirm('האם אתה בטוח שברצונך למחוק משימה זו?');">
-                            <button type="submit">🗑️</button>
-                        </form>
-                    </td>
-                </tr>
-            <% }); %>
-        <% } else { %>
-            <tr>
-                <td colspan="7">לא נמצאו משימות העונות על הסינון.</td>
+    <% if (tasks.length > 0) { %>
+        <% tasks.forEach((task, idx) => { %>
+            <tr class="<%= task.done ? 'completed-task' : '' %>">
+                <td><%= idx + 1 + (page * 10) %></td>
+                <td>
+                    <form action="/tasks/toggle/<%= task.id %>" method="POST" class="status-form">
+                        <button type="submit" class="status-button"><%= task.done ? '✅' : '⬜️' %></button>
+                    </form>
+                </td>
+                <td><%= task.description %></td>
+                <td><%= task.category_name || 'ללא' %></td>
+                <td><%= task.date ? new Date(task.date).toLocaleDateString('he-IL') : 'אין' %></td>
+                <td>
+                    <a href="/tasks/Edit/:<%= task.id %>" class="edit-button">✏️ ערוך</a>
+                </td>
+                <td>
+                    <form action="/tasks/Delete/<%= task.id %>" method="POST" class="delete-form" onsubmit="return confirm('האם אתה בטוח שברצונך למחוק משימה זו?');">
+                        <button type="submit" class="delete-button">🗑️ מחיקה</button>
+                    </form>
+                </td>
             </tr>
-        <% } %>
+        <% }); %>
+    <% } else { %>
+        <tr>
+            <td colspan="7">לא נמצאו משימות העונות על הסינון.</td>
+        </tr>
+    <% } %>
     </tbody>
 </table>
 
 <div class="pagination">
     <% if(page > 0) { %>
-        <a href="/tasks/List?p=<%= page - 1 %>&status=<%= filters.status || 'all' %>&category=<%= filters.category || 'all' %>">« הקודם</a>
+        <a href="/tasks/List?p=<%= page - 1 %>&status=<%= filters.status || 'all' %>&category=<%= filters.category || 'all' %>" class="pagination-link">« הקודם</a>
     <% } %>
     <% if (total_pages > 1) { %>
         <span>עמוד <%= page + 1 %> מתוך <%= total_pages %></span>
     <% } %>
     <% if(page < total_pages - 1) { %>
-        <a href="/tasks/List?p=<%= page + 1 %>&status=<%= filters.status || 'all' %>&category=<%= filters.category || 'all' %>">הבא »</a>
+        <a href="/tasks/List?p=<%= page + 1 %>&status=<%= filters.status || 'all' %>&category=<%= filters.category || 'all' %>" class="pagination-link">הבא »</a>
     <% } %>
 </div>
 

@@ -14,7 +14,10 @@
                 <a href="/categories/Edit/<%= usr.id %>" class="edit-button">✏️ עריכה</a>
             </td>
             <td style="text-align:center; vertical-align:middle;">
-                <a href="/categories/Delete?id=<%= usr.id %>" class="delete-button" onclick="return confirm('האם אתה בטוח שברצונך למחוק קטגוריה זו?');">🗑️ מחיקה</a>
+                <form action="/categories/Delete" method="POST" class="delete-form" onsubmit="return confirm('האם אתה בטוח שברצונך למחוק קטגוריה זו?');">
+                    <input type="hidden" name="id" value="<%= usr.id %>">
+                    <button type="submit" class="delete-button">🗑️ מחיקה</button>
+                </form>
             </td>
         </tr>
     <% } %>
