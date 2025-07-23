@@ -32,15 +32,15 @@ app.get('/', user_Mid.isLogged, (req, res) => {
     res.render('main');
 })
 
-
-
 const systemLog = require("./routers/system");
 
 app.use("/systemLog", systemLog);
 
-const users = require('./routers/users_R');
+const users = require('./routers/usersRTR');
 app.use('/users',users);
 
+const categories = require('./routers/categoryRTR');
+app.use('/categories', categories);
 
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

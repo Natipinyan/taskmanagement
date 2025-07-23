@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title><%= page_title %></title>
+    <style>
+        td,th{border: 1px solid black;}
+    </style>
+</head>
+<body>
+<H1><%= page_title %></H1>
+<a href="/categories/Add">add category</a>
+<table>
+    <tr>
+        <th>שם</th>
+    </tr>
+    <% for(let usr of categories){ %>
+        <tr>
+            <td>
+                <a href="/categories/Edit/<%= usr.id %>">edit</a>
+            </td>
+            <td><%= usr.name %></td>
+            <td>
+                <form action="/categories/Delete" method="post">
+                    <input type="hidden" name="id" value="<%= usr.id %>">
+                    <button>
+                        מחיקה
+                    </button>
+                </form>
+            </td>
+        </tr>
+    <% } %>
+    <tr>
+        <td colspan="100" class="centered">
+            <br/>
+            <form action="" method="get">
+                <% if(page > 0) { %>
+                    <button name="p" value="<%= page-1 %>">הקודם</button>
+                <% } %>
+                עמוד <%= page+1 %>
+                מתוך
+                <%= total_pages+1 %>
+                <% if(page < total_pages) { %>
+                    <button name="p" value="<%= page+1 %>">הבא</button>
+                <% } %>
+            </form>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
