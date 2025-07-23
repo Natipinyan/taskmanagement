@@ -47,6 +47,9 @@ router.get("/List", user_Mid.isLogged, categories_Mid.GetAllCategories,tasks_Mid
 router.post("/Delete/:id",user_Mid.isLogged,tasks_Mid.DeleteTask,(req,res)=>{
     res.redirect("/tasks/List");
 })
+router.post("/toggle/:id", user_Mid.isLogged, tasks_Mid.ToggleTaskDone, (req, res) => {
+    res.redirect("/tasks/List");
+});
 
 
 module.exports = router;

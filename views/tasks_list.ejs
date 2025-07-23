@@ -40,12 +40,13 @@
     <tbody>
     <% if (tasks.length > 0) { %>
         <% tasks.forEach(task => { %>
-            <tr class="<%= task.is_completed ? 'completed-task' : '' %>">
+            <tr class="<%= task.done ? 'completed-task' : '' %>">
                 <td>
                     <form action="/tasks/toggle/<%= task.id %>" method="POST">
-                        <button type="submit"><%= task.is_completed ? '✅' : '⬜️' %></button>
+                        <button type="submit"><%= task.done ? '✅' : '⬜️' %></button>
                     </form>
                 </td>
+
                 <td><%= task.description %></td>
                 <td><%= task.category_name || 'ללא' %></td>
 
@@ -67,13 +68,13 @@
 
 <div class="pagination">
     <% if(page > 0) { %>
-        <a href="/tasks?p=<%= page - 1 %>&status=<%= filters.status || 'all' %>&category=<%= filters.category || 'all' %>">« הקודם</a>
+        <a href="/tasks/List?p=<%= page - 1 %>&status=<%= filters.status || 'all' %>&category=<%= filters.category || 'all' %>">« הקודם</a>
     <% } %>
     <% if (total_pages > 1) { %>
         <span>עמוד <%= page + 1 %> מתוך <%= total_pages %></span>
     <% } %>
     <% if(page < total_pages - 1) { %>
-        <a href="/tasks?p=<%= page + 1 %>&status=<%= filters.status || 'all' %>&category=<%= filters.category || 'all' %>">הבא »</a>
+        <a href="/tasks/List?p=<%= page + 1 %>&status=<%= filters.status || 'all' %>&category=<%= filters.category || 'all' %>">הבא »</a>
     <% } %>
 </div>
 

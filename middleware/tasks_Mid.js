@@ -149,6 +149,37 @@ async function DeleteTask(req, res, next) {
     next();
 }
 
+async function ToggleTaskDone(req, res, next) {
+    const id = parseInt(req.params.id);
+    const user = req.user_id;
+
+    if (isNaN(id) || id <= 0) return next();
+
+    const promisePool = db_pool.promise();
+
+    try {
+        // תחילה נבדוק מה הערך הנוכחי
+        const [rows] = await promisePool.query(
+            `SELECT done FROM tasks WHERE id = ? AND user_id = ?`, [id, user]
+        );
+
+        if (rows.length === 0) return next(); // לא נמצא
+
+        const currentStatus = rows[0].done;
+        const newStatus = currentStatus ? 0 : 1;
+
+        await promisePool.query(
+            `UPDATE tasks SET done = ? WHERE id = ? AND user_id = ?`,
+            [newStatus, id, user]
+        );
+    } catch (err) {
+        console.log(err);
+    }
+
+    next();
+}
+
+
 
 module.exports = {
     AddTasks,
@@ -156,4 +187,5 @@ module.exports = {
     GetOneTask,
     DeleteTask,
     UpdateTask,
+    ToggleTaskDone,
 }
