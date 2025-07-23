@@ -1,17 +1,5 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title><%= page_title %></title>
-    <style>
-        td,th{border: 1px solid black;}
-    </style>
-</head>
-<body>
-<H1><%= page_title %></H1>
+<%- include('top_page') %>
+<h1><%= page_title %></h1>
 <a href="/users/Add">add user</a>
 <table>
     <tr>
@@ -23,18 +11,14 @@
     </tr>
     <% for(let usr of users){ %>
         <tr>
-            <td>
-                <a href="/users/Edit/<%= usr.id %>">edit</a>
-            </td>
+            <td><a href="/users/Edit/<%= usr.id %>">edit</a></td>
             <td><%= usr.name %></td>
             <td><%= usr.uname %></td>
             <td><%= usr.email %></td>
             <td>
                 <form action="/users/Delete" method="post">
                     <input type="hidden" name="id" value="<%= usr.id %>">
-                    <button>
-                        מחיקה
-                    </button>
+                    <button>מחיקה</button>
                 </form>
             </td>
         </tr>
@@ -46,9 +30,7 @@
                 <% if(page > 0) { %>
                     <button name="p" value="<%= page-1 %>">הקודם</button>
                 <% } %>
-                עמוד <%= page+1 %>
-                מתוך
-                <%= total_pages+1 %>
+                עמוד <%= page+1 %> מתוך <%= total_pages+1 %>
                 <% if(page < total_pages) { %>
                     <button name="p" value="<%= page+1 %>">הבא</button>
                 <% } %>
@@ -56,5 +38,4 @@
         </td>
     </tr>
 </table>
-</body>
-</html>
+<%- include('bottom_page') %>

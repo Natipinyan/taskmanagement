@@ -1,16 +1,13 @@
 <%- include('top_page') %>
 
 <h1><%= data.id ? 'עריכת משימה' : 'הוספת משימה חדשה' %></h1>
-
 <form action="<%= data.id ? '/tasks/Edit/' + data.id : '/tasks/Add' %>" method="POST">
     <div>
         <label for="category_id">קטגוריה:</label>
         <select name="category_id" id="category_id" required>
             <option value="">בחר קטגוריה</option>
             <% data.categories.forEach(category => { %>
-                <option value="<%= category.id %>" <%= data.category_id == category.id ? 'selected' : '' %>>
-                    <%= category.name %>
-                </option>
+                <option value="<%= category.id %>" <%= data.category_id == category.id ? 'selected' : '' %>><%= category.name %></option>
             <% }) %>
         </select>
     </div>
@@ -25,7 +22,5 @@
     <input type="hidden" name="user" value="<%= data.user %>">
     <button type="submit"><%= data.id ? 'עדכן משימה' : 'הוסף משימה' %></button>
 </form>
-
 <a href="/tasks/list">חזור לרשימת המשימות</a>
-
 <%- include('bottom_page') %>
