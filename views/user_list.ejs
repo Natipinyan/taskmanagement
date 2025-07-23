@@ -19,7 +19,6 @@
         <th>שם</th>
         <th>שם משתמש</th>
         <th>מייל</th>
-        <th>תז</th>
         <th>מחיקה</th>
     </tr>
     <% for(let usr of users){ %>
@@ -30,7 +29,6 @@
             <td><%= usr.name %></td>
             <td><%= usr.uname %></td>
             <td><%= usr.email %></td>
-            <td><%= usr.tz %></td>
             <td>
                 <form action="/users/Delete" method="post">
                     <input type="hidden" name="id" value="<%= usr.id %>">

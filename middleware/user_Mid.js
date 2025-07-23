@@ -85,10 +85,7 @@ async function UpdateUser(req,res,next){
     let id = parseInt(req.params.id);
     let name    = (req.body.name   !== undefined) ? addSlashes(req.body.name      ) : "";
     let uname   = (req.body.uname  !== undefined) ? addSlashes(req.body.uname     ) : "";
-    // let passwd  = (req.body.passwd !== undefined) ? addSlashes(req.body.passwd    ) : "";
     let email   = (req.body.email  !== undefined) ? addSlashes(req.body.email     ) : "";
-    let type_id = (req.body.type_id!== undefined) ?     Number(req.body.type_id   ) : -1;
-    let tz      = (req.body.tz     !== undefined) ? addSlashes(req.body.tz        ) : "";
     if(id <= 0){
         req.GoodOne=false;
         return next();
@@ -98,10 +95,7 @@ async function UpdateUser(req,res,next){
     let Query=`UPDATE users SET `;
     Query +=`name   ='${name   }' ,`;
     Query +=`uname  ='${uname  }' ,`;
-    // Query +=`passwd ='${passwd }' ,`;
-    Query +=`email  ='${email  }' ,`;
-    Query +=`type_id='${type_id}' ,`;
-    Query +=`tz     ='${tz     }'  `;
+    Query +=`email  ='${email  }' `;
     Query +=` WHERE id='${id}'`;
     const promisePool = db_pool.promise();
     let rows=[];
@@ -113,16 +107,14 @@ async function UpdateUser(req,res,next){
 
     next();
 }
-async function GetAllUsers(req,res,next){
+async function GetAllUsers(req, res, next) {
     let page=0;
     let rowPerPage=2;
     if(req.query.p !== undefined){
         page=parseInt(req.query.p);
     }
     req.page = page;
-
     let rows=[];
-    //--- count pages---
     let Query = "SELECT COUNT(id) AS cnt FROM users";
     const promisePool = db_pool.promise();
     let total_rows=0;
@@ -133,13 +125,13 @@ async function GetAllUsers(req,res,next){
         console.log(err);
     }
     req.total_pages = Math.floor(total_rows/rowPerPage);
-    //--- get current page ---
     Query="SELECT * FROM users";
     Query += ` LIMIT ${page*rowPerPage},${rowPerPage} `;
-    req.users_data=[];
+    req.users_data = [];
+
     try {
-        [rows] = await promisePool.query(Query);
-        req.users_data=rows;
+        const [rows] = await promisePool.query(Query);
+        req.users_data = rows;
     } catch (err) {
         console.log(err);
     }

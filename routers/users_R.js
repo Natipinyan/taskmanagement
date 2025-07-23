@@ -17,8 +17,8 @@ router.get("/List", user_Mid.GetAllUsers, (req, res) => {
         page_title: "רשימת המשתמשים",
         users: req.users_data,
         page  : req.page,
+        total_pages: req.total_pages,
     });
-    console.log(req.users_data)
 });
 
 router.get("/Edit/:id", user_Mid.GetOneUser, (req, res) => {
