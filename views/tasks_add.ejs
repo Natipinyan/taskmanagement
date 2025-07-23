@@ -1,0 +1,24 @@
+<%- include('top_page') %>
+
+
+<h1>הוספת משימה חדשה</h1>
+
+<form action="/tasks/Add" method="POST">
+    <div>
+        <label for="description">תיאור (עד 200 תווים):</label>
+        <input type="text" id="description" name="description" value="<%= data.description || '' %>" maxlength="200" required>
+    </div>
+    <div>
+        <label for="date">תאריך יעד:</label>
+        <input type="date" id="date" name="date" value="<%= data.date || '' %>" required>
+    </div>
+    <div>
+        <label for="category_id">קטגוריה:</label>
+
+    </div>
+    <button type="submit">הוסף משימה</button>
+</form>
+
+<a href="/tasks">חזור לרשימת המשימות</a>
+
+<%- include('bottom_page') %>

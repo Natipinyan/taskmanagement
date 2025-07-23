@@ -1,0 +1,60 @@
+<%- include('top_page') %>
+
+<h1><%= page_title %></h1>
+
+<a href="/tasks/add" class="add-button">הוסף משימה חדשה</a>
+
+<h2>סינון משימות</h2>
+
+
+<h2>רשימת המשימות</h2>
+<table>
+    <thead>
+    <tr>
+        <th>סטטוס</th>
+        <th>תיאור</th>
+        <th>קטגוריה</th>
+        <th>תאריך יעד</th>
+        <th>מחיקה</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% if (tasks.length > 0) { %>
+        <% tasks.forEach(task => { %>
+            <tr class="<%= task.is_completed ? 'completed-task' : '' %>">
+                <td>
+                    <form action="/tasks/toggle/<%= task.id %>" method="POST">
+                        <button type="submit"><%= task.is_completed ? '✅' : '⬜️' %></button>
+                    </form>
+                </td>
+                <td><%= task.description %></td>
+                <td><%= task.category_name || 'ללא' %></td>
+                <td><%= task.due_date ? new Date(task.due_date).toLocaleDateString('he-IL') : 'אין' %></td>
+                <td>
+                    <form action="/tasks/Delete/<%= task.id %>" method="POST" onsubmit="return confirm('האם אתה בטוח שברצונך למחוק משימה זו?');">
+                        <button type="submit">🗑️</button>
+                    </form>
+                </td>
+            </tr>
+        <% }); %>
+    <% } else { %>
+        <tr>
+            <td colspan="5">לא נמצאו משימות העונות על הסינון.</td>
+        </tr>
+    <% } %>
+    </tbody>
+</table>
+
+<div class="pagination">
+    <% if(page > 0) { %>
+        <a href="/tasks?p=<%= page - 1 %>&status=<%= filters.status || 'all' %>&category=<%= filters.category || 'all' %>">« הקודם</a>
+    <% } %>
+    <% if (total_pages > 1) { %>
+        <span>עמוד <%= page + 1 %> מתוך <%= total_pages %></span>
+    <% } %>
+    <% if(page < total_pages - 1) { %>
+        <a href="/tasks?p=<%= page + 1 %>&status=<%= filters.status || 'all' %>&category=<%= filters.category || 'all' %>">הבא »</a>
+    <% } %>
+</div>
+
+<%- include('bottom_page') %>

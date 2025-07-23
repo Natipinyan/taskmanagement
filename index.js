@@ -23,9 +23,6 @@ db_pool.getConnection((err, connection) => {
 });
 
 
-
-
-
 const user_Mid = require('./middleware/user_Mid');
 
 app.get('/', user_Mid.isLogged, (req, res) => {
@@ -41,6 +38,9 @@ app.use('/users',users);
 
 const categories = require('./routers/categoryRTR');
 app.use('/categories', categories);
+
+const tasks = require('./routers/tasksRTR');
+app.use('/tasks', tasks);
 
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
