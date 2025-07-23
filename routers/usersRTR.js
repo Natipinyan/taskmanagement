@@ -14,7 +14,7 @@ router.post('/Add', user_Mid.AddUser, (req, res) => {
 
 router.get('/List', user_Mid.GetAllUsers, (req, res) => {
     res.render('user_list', {
-        page_title: "רשימת המשתמשים",
+        page_title: "משתמשים",
         users: req.users_data,
         page: req.page,
         total_pages: req.total_pages,

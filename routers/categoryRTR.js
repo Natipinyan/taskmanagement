@@ -31,7 +31,7 @@ router.post('/Edit/:id', user_Mid.isLogged, categories_Mid.UpdateCategories, (re
 
 router.get('/List', user_Mid.isLogged, categories_Mid.GetAllCategories, (req, res) => {
     res.render('categories_list', {
-        page_title: "רשימת הקורסים",
+        page_title: "קטגוריות",
         categories: req.categories_data,
         page: req.page,
         total_pages: req.total_pages,

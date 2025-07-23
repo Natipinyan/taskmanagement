@@ -25,19 +25,20 @@
 <table>
     <thead>
         <tr>
-            <th>עריכה</th>
+            <th>#</th>
             <th>סטטוס</th>
             <th>תיאור</th>
             <th>קטגוריה</th>
             <th>תאריך יעד</th>
+            <th>עריכה</th>
             <th>מחיקה</th>
         </tr>
     </thead>
     <tbody>
         <% if (tasks.length > 0) { %>
-            <% tasks.forEach(task => { %>
+            <% tasks.forEach((task, idx) => { %>
                 <tr class="<%= task.done ? 'completed-task' : '' %>">
-                    <td><a href="/tasks/Edit/<%= task.id %>">ערוך</a></td>
+                    <td><%= idx + 1 + (page * 10) %></td>
                     <td>
                         <form action="/tasks/toggle/<%= task.id %>" method="POST">
                             <button type="submit"><%= task.done ? '✅' : '⬜️' %></button>
@@ -46,6 +47,7 @@
                     <td><%= task.description %></td>
                     <td><%= task.category_name || 'ללא' %></td>
                     <td><%= task.date ? new Date(task.date).toLocaleDateString('he-IL') : 'אין' %></td>
+                    <td><a href="/tasks/Edit/<%= task.id %>">ערוך</a></td>
                     <td>
                         <form action="/tasks/Delete/<%= task.id %>" method="POST" onsubmit="return confirm('האם אתה בטוח שברצונך למחוק משימה זו?');">
                             <button type="submit">🗑️</button>
@@ -55,7 +57,7 @@
             <% }); %>
         <% } else { %>
             <tr>
-                <td colspan="6">לא נמצאו משימות העונות על הסינון.</td>
+                <td colspan="7">לא נמצאו משימות העונות על הסינון.</td>
             </tr>
         <% } %>
     </tbody>

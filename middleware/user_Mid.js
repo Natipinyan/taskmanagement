@@ -100,25 +100,8 @@ async function UpdateUser(req, res, next) {
 }
 
 async function GetAllUsers(req, res, next) {
-    let page = 0;
-    let rowPerPage = 2;
-    if (req.query.p !== undefined) {
-        page = parseInt(req.query.p);
-    }
-    req.page = page;
-    let rows = [];
-    let Query = "SELECT COUNT(id) AS cnt FROM users";
     const promisePool = db_pool.promise();
-    let total_rows = 0;
-    try {
-        [rows] = await promisePool.query(Query);
-        total_rows = rows[0].cnt;
-    } catch (err) {
-        console.log(err);
-    }
-    req.total_pages = Math.floor(total_rows / rowPerPage);
-    Query = "SELECT * FROM users";
-    Query += ` LIMIT ${page * rowPerPage},${rowPerPage} `;
+    let Query = "SELECT * FROM users"; // שליפת כל המשתמשים ללא הגבלה
     req.users_data = [];
     try {
         const [rows] = await promisePool.query(Query);
@@ -128,6 +111,7 @@ async function GetAllUsers(req, res, next) {
     }
     next();
 }
+
 
 async function DeleteUser(req, res, next) {
     let id = parseInt(req.body.id);

@@ -36,27 +36,19 @@ async function UpdateCategories(req, res, next) {
 }
 
 async function GetAllCategories(req, res, next) {
-    let page = 0;
-    let rowPerPage = 2;
-    let id = req.user_id;
-    if (req.query.p !== undefined) {
-        page = parseInt(req.query.p);
-    }
-    req.page = page;
+    const id = req.user_id;
     const promisePool = db_pool.promise();
+
     try {
-        const [countRows] = await promisePool.query("SELECT COUNT(id) AS cnt FROM categories");
-        const total_rows = countRows[0].cnt;
-        req.total_pages = Math.floor(total_rows / rowPerPage);
         const [rows] = await promisePool.query(
-            `SELECT * FROM categories WHERE user_id='${id}' LIMIT ${page * rowPerPage}, ${rowPerPage}`
+            `SELECT * FROM categories WHERE user_id = ?`, [id]
         );
         req.categories_data = rows;
     } catch (err) {
         console.log(err);
         req.categories_data = [];
-        req.total_pages = 0;
     }
+
     next();
 }
 

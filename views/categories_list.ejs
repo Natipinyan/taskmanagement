@@ -1,35 +1,22 @@
 <%- include('top_page') %>
 <h1><%= page_title %></h1>
-<a href="/categories/Add">add category</a>
+<a href="/categories/Add" class="add-button">הוספת קטגוריה</a>
 <table>
     <tr>
-        <th>שם</th>
+        <th>שם קטגוריה</th>
+        <th>עריכה</th>
+        <th>מחיקה</th>
     </tr>
     <% for(let usr of categories){ %>
         <tr>
-            <td><a href="/categories/Edit/<%= usr.id %>">edit</a></td>
             <td><%= usr.name %></td>
-            <td>
-                <form action="/categories/Delete" method="post">
-                    <input type="hidden" name="id" value="<%= usr.id %>">
-                    <button>מחיקה</button>
-                </form>
+            <td style="text-align:center; vertical-align:middle;">
+                <a href="/categories/Edit/<%= usr.id %>" class="edit-button">✏️ עריכה</a>
+            </td>
+            <td style="text-align:center; vertical-align:middle;">
+                <a href="/categories/Delete?id=<%= usr.id %>" class="delete-button" onclick="return confirm('האם אתה בטוח שברצונך למחוק קטגוריה זו?');">🗑️ מחיקה</a>
             </td>
         </tr>
     <% } %>
-    <tr>
-        <td colspan="100" class="centered">
-            <br/>
-            <form action="" method="get">
-                <% if(page > 0) { %>
-                    <button name="p" value="<%= page-1 %>">הקודם</button>
-                <% } %>
-                עמוד <%= page+1 %> מתוך <%= total_pages+1 %>
-                <% if(page < total_pages) { %>
-                    <button name="p" value="<%= page+1 %>">הבא</button>
-                <% } %>
-            </form>
-        </td>
-    </tr>
 </table>
 <%- include('bottom_page') %>
