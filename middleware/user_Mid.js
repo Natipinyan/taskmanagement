@@ -1,17 +1,23 @@
+const jwt = require('jsonwebtoken');
 let md5 = require('md5');
+const JWT_SECRET = process.env.JWT_SECRET;
+
+const addSlashes    = require('slashes').addSlashes;
+const stripSlashes  = require('slashes').stripSlashes;
+
+
 
 async function isLogged(req, res,next){
-    const jwtToken = req.cookies.ImLoggedToYoman;
+    const jwtToken = req.cookies.ImLogged;
+    if (jwtToken === undefined)
+        return res.redirect("/login")
     let user_id=-1;
     if (jwtToken !== "") {
         jwt.verify(jwtToken, 'myPrivateKey', async (err, decodedToken) => {
-            // console.log("decodedToken=",decodedToken);
             if (err) {
                 console.log("err=",err);
             } else {
-                // let val = `${rows[0].id},${rows[0].name}`;
                 let data = decodedToken.data;
-                // console.log("data=",data);
                 user_id = data.split(",")[0];
                 req.user_id=user_id;
             }
@@ -19,7 +25,6 @@ async function isLogged(req, res,next){
     }
     if(user_id < 0)
         res.redirect("/login");
-
     next();
 }
 async function CheckLogin(req, res,next) {
@@ -44,10 +49,14 @@ async function CheckLogin(req, res,next) {
             'myPrivateKey',
             { expiresIn: 31*24*60*60 // in sec
             });
-        res.cookie("ImLoggedToYoman", token, {
+        res.cookie("ImLogged", token, {
             maxAge: 31*24*60*60 * 1000, // 3hrs in ms
         });
-
+        res.render("main")
+    }
+    else  {
+        req.validUser = false;
+        res.render("login", {error: "Invalid username or password"});
     }
 
     next();
@@ -58,14 +67,11 @@ async function AddUser(req,res,next){
     let passwd  = (req.body.passwd !== undefined) ?            req.body.passwd      : "";
     let enc_pass = md5("A"+passwd);
     let email   = (req.body.email  !== undefined) ? addSlashes(req.body.email     ) : "";
-    let type_id = (req.body.type_id!== undefined) ?     Number(req.body.type_id   ) : -1;
-    let tz      = (req.body.tz     !== undefined) ? addSlashes(req.body.tz        ) : "";
-
+    console.log(`name=${name}, uname=${uname}, passwd=${passwd}, email=${email}`);
     let Query="INSERT INTO users";
-    Query +="( `name`, `uname`, `passwd`, `email`, `type_id`, `tz`)";
+    Query +="( `name`, `uname`, `passwd`, `email`)";
     Query +=" VALUES ";
-    Query +=`( '${name}', '${uname}', '${enc_pass}', '${email}', '${type_id}', '${tz}')`;
-    // console.log(__filename,Query);
+    Query +=`( '${name}', '${uname}', '${enc_pass}', '${email}' )`;
     const promisePool = db_pool.promise();
     let rows=[];
     try {
@@ -141,29 +147,6 @@ async function GetAllUsers(req,res,next){
 
     next();
 }
-async function GetOneUser(req,res,next){
-    let id = parseInt(req.params.id);
-    console.log(id)
-    if((id === NaN) || (id <= 0)){
-        req.GoodOne=false;
-        return next();
-    }
-    req.GoodOne=true;
-    let Query=`SELECT * FROM users  WHERE id='${id}' `;
-    const promisePool = db_pool.promise();
-    let rows=[];
-    req.one_user_data=[];
-    try {
-        [rows] = await promisePool.query(Query);
-        if(rows.length > 0) {
-            req.one_user_data = rows[0];
-        }
-    } catch (err) {
-        console.log(err);
-    }
-
-    next();
-}
 async function DeleteUser(req,res,next){
     let id = parseInt(req.body.id);
     if(id > 0) {
@@ -184,7 +167,6 @@ async function DeleteUser(req,res,next){
 module.exports = {
     AddUser,
     GetAllUsers,
-    GetOneUser,
     DeleteUser,
     UpdateUser,
     CheckLogin,

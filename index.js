@@ -1,21 +1,12 @@
-const port = 7070;
 const express = require('express');
 const app = express();
-app.use(express.json());
-
 require('dotenv').config();
-
-
-const bodyParser = require('body-parser');
-const path = require("path");
-app.use(bodyParser.urlencoded({extended: false}));
-
-
-app.listen(port, () => {
-    console.log(`Now listening on port http://localhost:${port}`);
-});
-
-const { db_pool } = require('./db');
+const port = process.env.PORT || 3000;
+const {db_pool}  = require('./db');
+const path = require('path');
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, "./views"));
+app.use(express.urlencoded({ extended: false }));
 
 db_pool.getConnection((err, connection) => {
     if (err) {
@@ -28,6 +19,20 @@ db_pool.getConnection((err, connection) => {
 
 
 
-app.get('/', (req, res) => {
-    res.render("login", {});
-})
+
+
+const user_Mid = require('./middleware/user_Mid');
+
+// app.get('/', user_Mid.isLogged, (req, res) => {
+//     res.render("login", {});
+// })
+//
+
+
+const systemLog = require("./routes/system");
+
+app.use("/systemLog", systemLog);
+
+
+
+app.listen(port, () => console.log(`Example app listening on port ${port}!`));
