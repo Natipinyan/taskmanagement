@@ -3,8 +3,12 @@ const addSlashes    = require('slashes').addSlashes;
 const stripSlashes  = require('slashes').stripSlashes;
 
 async function AddCategories(req,res,next){
+
     let name = addSlashes(req.body.name);
-    let Query=`INSERT INTO categories( name) VALUES ('${name}')`;
+    let user = req.body.user;
+
+    let Query=`INSERT INTO categories( name,user_id) VALUES ('${name}','${user}')`;
+    console.log(`Query=${Query}`);
     const promisePool = db_pool.promise();
     let rows=[];
     try {
@@ -17,13 +21,15 @@ async function AddCategories(req,res,next){
 }
 async function UpdateCategories(req,res,next){
     let id = parseInt(req.params.id);
+    let user = req.user_id;
+
     if(id <= 0){
         req.GoodOne=false;
         return next();
     }
     req.GoodOne=true;
     let name = addSlashes(req.body.name);
-    let Query=`UPDATE categories SET name='${name}' WHERE id='${id}'`;
+    let Query=`UPDATE categories SET name='${name}' WHERE id='${id}' AND user_id='${user}'`;
     const promisePool = db_pool.promise();
     let rows=[];
     try {
@@ -38,6 +44,8 @@ async function GetAllCategories(req, res, next) {
     let page = 0;
     let rowPerPage = 2;
 
+    let id = req.user_id;
+
     if (req.query.p !== undefined) {
         page = parseInt(req.query.p);
     }
@@ -47,13 +55,13 @@ async function GetAllCategories(req, res, next) {
     const promisePool = db_pool.promise();
 
     try {
-        const [countRows] = await promisePool.query("SELECT COUNT(id) AS cnt FROM categories");
+        const [countRows] = await promisePool.query("SELECT COUNT(id) AS cnt FROM categories" );
         const total_rows = countRows[0].cnt;
         req.total_pages = Math.floor(total_rows / rowPerPage);
 
         const [rows] = await promisePool.query(
-            `SELECT * FROM categories LIMIT ${page * rowPerPage}, ${rowPerPage}`
-        );
+            `SELECT * FROM categories WHERE user_id='${id}' LIMIT ${page * rowPerPage}, ${rowPerPage}`
+    );
         req.categories_data = rows;
 
     } catch (err) {
@@ -66,13 +74,16 @@ async function GetAllCategories(req, res, next) {
 }
 async function GetOneCategory(req,res,next){
     let id = parseInt(req.params.id);
-    console.log(id)
+    let user = req.user_id;
+
+
     if((id === NaN) || (id <= 0)){
         req.GoodOne=false;
         return next();
     }
     req.GoodOne=true;
-    let Query=`SELECT * FROM categories  WHERE id='${id}' `;
+    let Query = `SELECT * FROM categories WHERE id='${id}' AND user_id='${user}'`;
+
     const promisePool = db_pool.promise();
     let rows=[];
     req.one_Category_data=[];
