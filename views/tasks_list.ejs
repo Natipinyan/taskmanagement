@@ -5,6 +5,25 @@
 <a href="/tasks/add" class="add-button">הוסף משימה חדשה</a>
 
 <h2>סינון משימות</h2>
+<form method="GET" action="/tasks/List">
+    <label for="status">סטטוס:</label>
+    <select name="status" id="status">
+        <option value="all" <%= filters.status === 'all' ? 'selected' : '' %>>הכל</option>
+        <option value="completed" <%= filters.status === 'completed' ? 'selected' : '' %>>בוצעו</option>
+        <option value="pending" <%= filters.status === 'pending' ? 'selected' : '' %>>לא בוצעו</option>
+    </select>
+
+    <label for="category">קטגוריה:</label>
+    <select name="category" id="category">
+        <option value="all" <%= filters.category === 'all' ? 'selected' : '' %>>כל הקטגוריות</option>
+        <% categories.forEach(cat => { %>
+            <option value="<%= cat.id %>" <%= filters.category == cat.id ? 'selected' : '' %>><%= cat.name %></option>
+        <% }) %>
+    </select>
+
+    <button type="submit">סנן</button>
+</form>
+
 
 
 <h2>רשימת המשימות</h2>
@@ -29,6 +48,7 @@
                 </td>
                 <td><%= task.description %></td>
                 <td><%= task.category_name || 'ללא' %></td>
+
                 <td><%= task.due_date ? new Date(task.due_date).toLocaleDateString('he-IL') : 'אין' %></td>
                 <td>
                     <form action="/tasks/Delete/<%= task.id %>" method="POST" onsubmit="return confirm('האם אתה בטוח שברצונך למחוק משימה זו?');">

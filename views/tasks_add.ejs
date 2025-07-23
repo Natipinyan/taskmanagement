@@ -4,6 +4,12 @@
 <h1>הוספת משימה חדשה</h1>
 
 <form action="/tasks/Add" method="POST">
+    <select name="category_id" id="category_id">
+        <option value="">בחר קטגוריה</option>
+        <% data.categories.forEach(category => { %>
+            <option value="<%= category.id %>" <%= (data.categories.id === category.id) ? 'selected' : '' %>><%= category.name %></option>
+        <% }); %>
+    </select>
     <div>
         <label for="description">תיאור (עד 200 תווים):</label>
         <input type="text" id="description" name="description" value="<%= data.description || '' %>" maxlength="200" required>
