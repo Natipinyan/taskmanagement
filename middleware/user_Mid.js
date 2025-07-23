@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
 let md5 = require('md5');
-const JWT_SECRET = process.env.JWT_SECRET;
 
 const addSlashes    = require('slashes').addSlashes;
 const stripSlashes  = require('slashes').stripSlashes;
@@ -10,7 +9,7 @@ const stripSlashes  = require('slashes').stripSlashes;
 async function isLogged(req, res,next){
     const jwtToken = req.cookies.ImLogged;
     if (jwtToken === undefined)
-        return res.redirect("/login")
+        return res.redirect("/systemLog/login")
     let user_id=-1;
     if (jwtToken !== "") {
         jwt.verify(jwtToken, 'myPrivateKey', async (err, decodedToken) => {
@@ -24,7 +23,7 @@ async function isLogged(req, res,next){
         })
     }
     if(user_id < 0)
-        res.redirect("/login");
+        res.redirect("/systemLog/login");
     next();
 }
 async function CheckLogin(req, res,next) {
@@ -149,6 +148,7 @@ async function GetAllUsers(req,res,next){
 }
 async function DeleteUser(req,res,next){
     let id = parseInt(req.body.id);
+    console.log(`DeleteUser id=${id}`);
     if(id > 0) {
         let Query = `DELETE FROM users WHERE id='${id}' `;
         const promisePool = db_pool.promise();
@@ -163,6 +163,27 @@ async function DeleteUser(req,res,next){
     next();
 
 }
+async function GetOneUser(req, res, next) {
+    let id = Number(req.params.id);
+    if (isNaN(id) || id <= 0) {
+        req.GoodOne = false;
+        return next();
+    }
+
+    req.GoodOne = true;
+
+    let Query = `SELECT * FROM users WHERE id=${id}`;
+    const promisePool = db_pool.promise();
+
+    try {
+        const [rows] = await promisePool.query(Query);
+        req.one_user_data = rows.length > 0 ? rows[0] : {};
+    } catch (err) {
+        console.log(err);
+    }
+
+    next();
+}
 
 module.exports = {
     AddUser,
@@ -171,4 +192,5 @@ module.exports = {
     UpdateUser,
     CheckLogin,
     isLogged,
+    GetOneUser,
 }

@@ -8,6 +8,11 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, "./views"));
 app.use(express.urlencoded({ extended: false }));
 
+
+let cookieParser = require('cookie-parser');
+app.use(cookieParser());
+global.jwt = require('jsonwebtoken');
+
 db_pool.getConnection((err, connection) => {
     if (err) {
         console.error('Error connecting to the database:', err.message);
@@ -23,15 +28,18 @@ db_pool.getConnection((err, connection) => {
 
 const user_Mid = require('./middleware/user_Mid');
 
-// app.get('/', user_Mid.isLogged, (req, res) => {
-//     res.render("login", {});
-// })
-//
+app.get('/', user_Mid.isLogged, (req, res) => {
+    res.render('main');
+})
 
 
-const systemLog = require("./routes/system");
+
+const systemLog = require("./routers/system");
 
 app.use("/systemLog", systemLog);
+
+const users = require('./routers/users_R');
+app.use('/users',users);
 
 
 
