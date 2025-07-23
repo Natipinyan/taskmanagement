@@ -19,18 +19,28 @@ router.get("/Add",user_Mid.isLogged,categories_Mid.GetAllCategories,(req,res)=>{
 router.post("/Add",user_Mid.isLogged,tasks_Mid.AddTasks, (req, res) => {
     res.redirect("/tasks/List");
 });
-router.get("/Edit/:id",user_Mid.isLogged,tasks_Mid.GetOneTask,(req,res)=>{
-    if(req.GoodOne) {
+
+
+router.get("/Edit/:id", user_Mid.isLogged, categories_Mid.GetAllCategories, tasks_Mid.GetOneTask, (req, res) => {
+    if (req.GoodOne) {
         res.render("tasks_add.ejs", {
-            data: req.one_task_data,
+            data: {
+                ...req.one_task_data,
+                categories: req.categories_data,
+                user: req.user_id
+            }
         });
-    } else{
+    } else {
         res.redirect("/tasks/List");
     }
 });
+
 router.post("/Edit/:id",user_Mid.isLogged, tasks_Mid.UpdateTask, (req, res) => {
     res.redirect("/tasks/List");
 });
+
+
+
 router.get("/List", user_Mid.isLogged, categories_Mid.GetAllCategories,tasks_Mid.GetAllTasks, (req, res) => {
         res.render("tasks_list", {
             page_title: "רשימת המטלות",

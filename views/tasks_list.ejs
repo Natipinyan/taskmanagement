@@ -24,12 +24,11 @@
     <button type="submit">סנן</button>
 </form>
 
-
-
 <h2>רשימת המשימות</h2>
 <table>
     <thead>
     <tr>
+        <th>עריכה</th>
         <th>סטטוס</th>
         <th>תיאור</th>
         <th>קטגוריה</th>
@@ -42,15 +41,16 @@
         <% tasks.forEach(task => { %>
             <tr class="<%= task.done ? 'completed-task' : '' %>">
                 <td>
+                    <a href="/tasks/Edit/<%= task.id %>">ערוך</a>
+                </td>
+                <td>
                     <form action="/tasks/toggle/<%= task.id %>" method="POST">
                         <button type="submit"><%= task.done ? '✅' : '⬜️' %></button>
                     </form>
                 </td>
-
                 <td><%= task.description %></td>
                 <td><%= task.category_name || 'ללא' %></td>
-
-                <td><%= task.due_date ? new Date(task.due_date).toLocaleDateString('he-IL') : 'אין' %></td>
+                <td><%= task.date ? new Date(task.date).toLocaleDateString('he-IL') : 'אין' %></td>
                 <td>
                     <form action="/tasks/Delete/<%= task.id %>" method="POST" onsubmit="return confirm('האם אתה בטוח שברצונך למחוק משימה זו?');">
                         <button type="submit">🗑️</button>
@@ -60,7 +60,7 @@
         <% }); %>
     <% } else { %>
         <tr>
-            <td colspan="5">לא נמצאו משימות העונות על הסינון.</td>
+            <td colspan="6">לא נמצאו משימות העונות על הסינון.</td>
         </tr>
     <% } %>
     </tbody>

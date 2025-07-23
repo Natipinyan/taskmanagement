@@ -2,27 +2,22 @@
 const addSlashes    = require('slashes').addSlashes;
 const stripSlashes  = require('slashes').stripSlashes;
 
-async function AddTasks(req,res,next){
-
-
+async function AddTasks(req, res, next) {
     let user = req.user_id;
     let description = req.body.description;
     let date = req.body.date;
     let category = req.body.category_id;
 
-    let Query=`INSERT INTO tasks(user_id,category_id,description,date) VALUES ('${user}','${category}','${description}','${date}')`;
-    console.log(`Query=${Query}`);
+    let Query = "INSERT INTO tasks (user_id, category_id, description, date) VALUES (?, ?, ?, ?)";
     const promisePool = db_pool.promise();
-    let rows=[];
     try {
-        [rows] = await promisePool.query(Query);
+        await promisePool.query(Query, [user, category, description, date]);
     } catch (err) {
         console.log(err);
     }
 
     next();
 }
-
 
 
 async function UpdateTask(req, res, next) {

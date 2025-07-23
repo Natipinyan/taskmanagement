@@ -1,28 +1,29 @@
 <%- include('top_page') %>
 
+<h1><%= data.id ? 'עריכת משימה' : 'הוספת משימה חדשה' %></h1>
 
-<h1>הוספת משימה חדשה</h1>
-
-<form action="/tasks/Add" method="POST">
-    <select name="category_id" id="category_id">
-        <option value="">בחר קטגוריה</option>
-        <% data.categories.forEach(category => { %>
-            <option value="<%= category.id %>" <%= (data.categories.id === category.id) ? 'selected' : '' %>><%= category.name %></option>
-        <% }); %>
-    </select>
+<form action="<%= data.id ? '/tasks/Edit/' + data.id : '/tasks/Add' %>" method="POST">
+    <div>
+        <label for="category_id">קטגוריה:</label>
+        <select name="category_id" id="category_id" required>
+            <option value="">בחר קטגוריה</option>
+            <% data.categories.forEach(category => { %>
+                <option value="<%= category.id %>" <%= data.category_id == category.id ? 'selected' : '' %>>
+                    <%= category.name %>
+                </option>
+            <% }) %>
+        </select>
+    </div>
     <div>
         <label for="description">תיאור (עד 200 תווים):</label>
         <input type="text" id="description" name="description" value="<%= data.description || '' %>" maxlength="200" required>
     </div>
     <div>
         <label for="date">תאריך יעד:</label>
-        <input type="date" id="date" name="date" value="<%= data.date || '' %>" required>
+        <input type="date" id="date" name="date" value="<%= data.date && typeof data.date === 'string' ? data.date : '' %>" required>
     </div>
-    <div>
-        <label for="category_id">קטגוריה:</label>
-
-    </div>
-    <button type="submit">הוסף משימה</button>
+    <input type="hidden" name="user" value="<%= data.user %>">
+    <button type="submit"><%= data.id ? 'עדכן משימה' : 'הוסף משימה' %></button>
 </form>
 
 <a href="/tasks/list">חזור לרשימת המשימות</a>
