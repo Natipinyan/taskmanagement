@@ -1,0 +1,253 @@
+/* רקע משולב מודרני */
+body {
+    min-height: 100vh;
+    margin: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    color: #222;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+header.main-header {
+    width: 100vw;
+    background: rgba(255,255,255,0.95);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    margin-bottom: 24px;
+}
+
+.main-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5em 0;
+}
+.main-nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1.5em;
+    margin: 0;
+    padding: 0;
+}
+.main-nav li {
+    display: flex;
+    align-items: center;
+}
+.main-nav a {
+    text-decoration: none;
+    color: #2d3a4b;
+    font-weight: 500;
+    font-size: 1.1em;
+    padding: 0.5em 1.2em;
+    border-radius: 2em;
+    transition: background 0.2s, color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
+}
+.main-nav a:hover, .main-nav a:focus {
+    background: #e3eafc;
+    color: #1a73e8;
+}
+
+h1, h2 {
+    text-align: center;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    align-items: center;
+    margin: 1em auto;
+    max-width: 400px;
+    background: rgba(255,255,255,0.85);
+    padding: 2em 2em 1em 2em;
+    border-radius: 1.5em;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+}
+form label {
+    font-weight: 500;
+    margin-bottom: 0.2em;
+}
+form input, form select, form button {
+    font-size: 1em;
+    padding: 0.5em 1em;
+    border-radius: 2em;
+    border: 1px solid #b0b8c1;
+    margin-bottom: 0.5em;
+    outline: none;
+    transition: border 0.2s;
+}
+form input:focus, form select:focus {
+    border: 1.5px solid #1a73e8;
+}
+form button, button, .add-button {
+    background: linear-gradient(90deg, #1a73e8 0%, #67c6ff 100%);
+    color: #fff;
+    border: none;
+    border-radius: 2em;
+    padding: 0.6em 1.8em;
+    font-weight: 600;
+    font-size: 1.1em;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(26,115,232,0.08);
+    transition: background 0.2s, transform 0.1s;
+    margin-top: 0.5em;
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
+}
+form button:hover, button:hover, .add-button:hover {
+    background: linear-gradient(90deg, #1761c7 0%, #4bb3fd 100%);
+    transform: translateY(-2px) scale(1.04);
+}
+button[type="submit"]:has(> .fa-trash), .add-button {
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
+}
+button[type="submit"]:has(> .fa-trash)::before {
+    content: "🗑️ ";
+}
+button[type="submit"]:has(> .fa-edit)::before {
+    content: "✏️ ";
+}
+button[type="submit"]:has(> .fa-check)::before {
+    content: "✔️ ";
+}
+
+/* טבלאות */
+table {
+    border-collapse: collapse;
+    margin: 2em auto;
+    background: rgba(255,255,255,0.95);
+    border-radius: 1em;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    min-width: 320px;
+    max-width: 90vw;
+}
+th, td {
+    padding: 0.7em 1.2em;
+    text-align: center;
+    border-bottom: 1px solid #e3eafc;
+    font-size: 1em;
+}
+th {
+    background: #e3eafc;
+    font-weight: 700;
+}
+tr:last-child td {
+    border-bottom: none;
+}
+.completed-task td {
+    text-decoration: line-through;
+    color: #aaa;
+    background: #f0f4f8;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+    margin: 1.5em 0;
+}
+.pagination a, .pagination span {
+    font-size: 1.1em;
+    color: #1a73e8;
+    padding: 0.3em 1em;
+    border-radius: 1em;
+    background: #e3eafc;
+    margin: 0 0.2em;
+    text-decoration: none;
+}
+.pagination a:hover {
+    background: #c3cfe2;
+}
+
+/* התאמה למובייל */
+@media (max-width: 600px) {
+    .main-nav ul {
+        flex-direction: column;
+        gap: 0.7em;
+    }
+    form, table {
+        max-width: 98vw;
+        font-size: 0.98em;
+    }
+    th, td {
+        padding: 0.4em 0.5em;
+    }
+} 
+
+a.add-button::before {
+    content: "➕ ";
+}
+.add-button:hover {
+    background: linear-gradient(90deg, #11998e 0%, #38f9d7 100%);
+    transform: translateY(-2px) scale(1.04);
+}
+
+.edit-button, .delete-button {
+    font-weight: 700;
+    border: none;
+    border-radius: 2em;
+    padding: 0.5em 1.4em;
+    font-size: 1em;
+    margin: 0.2em 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: background 0.2s, transform 0.1s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    text-decoration: none;
+}
+.delete-button {
+    background: linear-gradient(90deg, #ff5858 0%, #f09819 100%);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(255,88,88,0.08);
+}
+.delete-button:hover {
+    background: linear-gradient(90deg, #d7263d 0%, #fbb034 100%);
+    transform: translateY(-2px) scale(1.04);
+}
+.edit-button {
+    background: linear-gradient(90deg, #f7971e 0%, #ffd200 100%);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(247,151,30,0.08);
+}
+.edit-button:hover {
+    background: linear-gradient(90deg, #f7971e 0%, #ffd200 80%);
+    color: #222;
+    transform: translateY(-2px) scale(1.04);
+} 
+
+.back-button {
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    font-weight: 700;
+    border: none;
+    border-radius: 2em;
+    padding: 0.5em 1.4em;
+    font-size: 1em;
+    margin: 1.2em 0 0 0;
+    box-shadow: 0 2px 8px rgba(102,126,234,0.08);
+    transition: background 0.2s, transform 0.1s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    text-decoration: none;
+    justify-content: center;
+}
+.back-button:hover {
+    background: linear-gradient(90deg, #5a5c9e 0%, #5433ff 100%);
+    color: #fff;
+    transform: translateY(-2px) scale(1.04);
+} 
