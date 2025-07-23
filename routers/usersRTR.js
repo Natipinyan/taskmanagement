@@ -12,7 +12,7 @@ router.post('/Add', user_Mid.AddUser, (req, res) => {
     res.redirect('/Users/List');
 });
 
-router.get('/List', user_Mid.GetAllUsers, (req, res) => {
+router.get('/List', user_Mid.isLogged, user_Mid.isLogged, user_Mid.GetAllUsers, (req, res) => {
     res.render('user_list', {
         page_title: "משתמשים",
         users: req.users_data,
@@ -21,7 +21,7 @@ router.get('/List', user_Mid.GetAllUsers, (req, res) => {
     });
 });
 
-router.get('/Edit/:id', user_Mid.GetOneUser, (req, res) => {
+router.get('/Edit/:id', user_Mid.isLogged, user_Mid.GetOneUser, (req, res) => {
     if (req.GoodOne) {
         res.render('user_add', {
             data: req.one_user_data,
@@ -31,11 +31,11 @@ router.get('/Edit/:id', user_Mid.GetOneUser, (req, res) => {
     }
 });
 
-router.post('/Edit/:id', user_Mid.UpdateUser, (req, res) => {
+router.post('/Edit/:id', user_Mid.isLogged, user_Mid.UpdateUser, (req, res) => {
     res.redirect('/Users/List');
 });
 
-router.post('/Delete', user_Mid.DeleteUser, (req, res) => {
+router.post('/Delete', user_Mid.isLogged, user_Mid.DeleteUser, (req, res) => {
     res.redirect('/Users/List');
 });
 

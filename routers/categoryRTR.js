@@ -39,7 +39,7 @@ router.get('/List', user_Mid.isLogged, categories_Mid.GetAllCategories, (req, re
     });
 });
 
-router.post('/Delete', categories_Mid.DeleteCategory, (req, res) => {
+router.post('/Delete', user_Mid.isLogged, categories_Mid.DeleteCategory, (req, res) => {
     res.redirect('/categories/List');
 });
 
