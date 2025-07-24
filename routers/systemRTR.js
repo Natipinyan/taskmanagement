@@ -8,4 +8,9 @@ router.get('/login', (req, res) => {
 
 router.post('/login', user_Mid.CheckLogin, (req, res) => {});
 
+router.get('/logout', user_Mid.LogoutUser, (req, res) => {
+    res.redirect('/systemLog/login');
+});
+
+
 module.exports = router;

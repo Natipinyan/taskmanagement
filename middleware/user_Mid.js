@@ -101,7 +101,15 @@ async function UpdateUser(req, res, next) {
 
 async function GetAllUsers(req, res, next) {
     const promisePool = db_pool.promise();
-    let Query = "SELECT * FROM users"; // שליפת כל המשתמשים ללא הגבלה
+    let user_id = req.user_id;
+    let Query = "";
+    console.log(`GetAllUsers user_id=${user_id}`);
+    if(user_id == 1){
+        Query = "SELECT * FROM users";
+    }else{
+        Query = `SELECT * FROM users WHERE id=${user_id}`;
+    }
+
     req.users_data = [];
     try {
         const [rows] = await promisePool.query(Query);
@@ -111,7 +119,6 @@ async function GetAllUsers(req, res, next) {
     }
     next();
 }
-
 
 async function DeleteUser(req, res, next) {
     let id = parseInt(req.body.id);
@@ -147,6 +154,13 @@ async function GetOneUser(req, res, next) {
     next();
 }
 
+async function LogoutUser(req, res, next) {
+    res.clearCookie('ImLogged');
+    console.log('User logged out, cookie cleared');
+    next();
+}
+
+
 module.exports = {
     AddUser,
     GetAllUsers,
@@ -155,4 +169,5 @@ module.exports = {
     CheckLogin,
     isLogged,
     GetOneUser,
+    LogoutUser,
 };

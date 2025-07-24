@@ -27,7 +27,7 @@ app.get('/', user_Mid.isLogged, (req, res) => {
     res.render('main');
 });
 
-const systemLog = require('./routers/system');
+const systemLog = require('./routers/systemRTR');
 app.use('/systemLog', systemLog);
 
 const users = require('./routers/usersRTR');
