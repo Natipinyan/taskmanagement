@@ -5,6 +5,8 @@ const user_Mid = require('../middleware/user_Mid');
 router.get('/Add', (req, res) => {
     res.render('user_add', {
         data: {},
+        show_navigate: false,
+
     });
 });
 
@@ -25,6 +27,8 @@ router.get('/Edit/:id', user_Mid.isLogged, user_Mid.GetOneUser, (req, res) => {
     if (req.GoodOne) {
         res.render('user_add', {
             data: req.one_user_data,
+            show_navigate: true,
+
         });
     } else {
         res.redirect('/Users/List');

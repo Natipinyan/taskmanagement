@@ -1,19 +1,62 @@
-<%- include('top_page') %>
-<h1>הוספת משתמש</h1>
-<form action="" method="post">
-    <label for="name">שם </label>
-    <input type="text" name="name" id="name" value="<%= data.name %>" />
-    <br>
-    <label for="uname">שם משתמש </label>
-    <input type="text" name="uname" id="uname" value="<%= data.uname %>" />
-    <br>
-    <label for="passwd">סיסמה </label>
-    <input type="text" name="passwd" id="passwd" value="" />
-    <br>
-    <label for="email">מייל </label>
-    <input type="email" name="email" id="email" value="<%= data.email %>" />
-    <br>
-    <button name="btn" value="1">send</button>
-</form>
-<a href="/users/List" class="back-button">⬅️ חזרה לרשימת המשתמשים</a>
+<!doctype html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הוספת משתמש</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body dir="rtl">
+
+<% if (show_navigate) { %>
+    <header class="main-header">
+        <nav class="main-nav">
+            <ul>
+                <li><a href="/tasks/List">משימות</a></li>
+                <li><a href="/categories/List">קטגוריות</a></li>
+                <li><a href="/users/List">משתמשים</a></li>
+                <li><a href="/systemLog/logout">יציאה</a></li>
+                <li><a href="/">דף הבית</a></li>
+            </ul>
+        </nav>
+    </header>
+<% } else { %>
+    <header class="main-header">
+        <nav class="main-nav">
+            <ul>
+                <li><a href="/systemLog/login">התחברות</a></li>
+            </ul>
+        </nav>
+    </header>
+<%} %>
+
+<main class="form-container">
+    <h1>הוספת משתמש</h1>
+    <form action="" method="post">
+        <label for="name">שם:</label>
+        <input type="text" name="name" id="name" value="<%= data.name %>" required>
+        <br>
+
+        <label for="uname">שם משתמש:</label>
+        <input type="text" name="uname" id="uname" value="<%= data.uname %>" required>
+        <br>
+
+        <label for="passwd">סיסמה:</label>
+        <input type="password" name="passwd" id="passwd" required>
+        <br>
+
+        <label for="email">מייל:</label>
+        <input type="email" name="email" id="email" value="<%= data.email %>" required>
+        <br>
+
+        <button type="submit" name="btn" value="1">שלח</button>
+    </form>
+    <% if (show_navigate) { %>
+    <a href="/users/List" class="back-button">⬅️ חזרה לרשימת המשתמשים</a>
+    <% }  %>
+</main>
+
 <%- include('bottom_page') %>
+
+</body>
+</html>
